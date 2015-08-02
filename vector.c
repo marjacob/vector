@@ -1,7 +1,7 @@
+#include <assert.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "debug.h"
 #include "vector.h"
 
 #ifndef VEC_INITCAP
@@ -10,8 +10,6 @@
 
 inline static void _vector_shift_left(struct vector *vec, size_t index)
 {
-	DEBUG_PRINT("vec = %p, index = %zu\n", vec, index);
-
 	if (index < vec->count - 1) {
 		for (size_t i = index; i < vec->count; ++i) {
 			vec->mem[i] = vec->mem[1 + i];
@@ -23,8 +21,6 @@ inline static void _vector_shift_left(struct vector *vec, size_t index)
 
 int vector_add(struct vector *vec, void *item)
 {
-	DEBUG_PRINT("vec = %p, item = %p\n", vec, item);
-
 	int rc = VECE_OK;
 
 	if (VECE_OK == (rc = vector_reserve(vec, vec->count + 1))) {
@@ -36,8 +32,6 @@ int vector_add(struct vector *vec, void *item)
 
 int vector_apply(struct vector *vec, void (*func)(void *))
 {
-	DEBUG_PRINT("vec = %p, func = %p\n", vec, func);
-
 	int rc = VECE_OK;
 	void *item = NULL;
 
@@ -56,8 +50,6 @@ int vector_apply(struct vector *vec, void (*func)(void *))
 
 int vector_delete(struct vector *vec, size_t index, void **item)
 {
-	DEBUG_PRINT("vec = %p, index = %zu, item = %p\n", vec, index, item);
-	
 	int rc = VECE_OUT_OF_BOUNDS;
 	
 	if (vec->count > index) {
@@ -74,8 +66,6 @@ int vector_delete(struct vector *vec, size_t index, void **item)
 
 int vector_free(struct vector *vec)
 {
-	DEBUG_PRINT("vec = %p\n", vec);
-
 	int rc = VECE_NULL_POINTER;
 	
 	if (vec) {
@@ -88,8 +78,6 @@ int vector_free(struct vector *vec)
 
 int vector_get(struct vector *vec, size_t index, void **item)
 {
-	DEBUG_PRINT("vec = %p, index = %zu, item = %p\n", vec, index, item);
-
 	if (!vec) {
 		return VECE_NULL_POINTER;
 	}
@@ -104,8 +92,6 @@ int vector_get(struct vector *vec, size_t index, void **item)
 
 int vector_init(struct vector *vec)
 {
-	DEBUG_PRINT("vec = %p\n", vec);
-
 	int rc = VECE_NULL_POINTER;
 	
 	if (vec) {
@@ -121,8 +107,6 @@ int vector_init(struct vector *vec)
 
 int vector_reserve(struct vector *vec, size_t size)
 {
-	DEBUG_PRINT("vec = %p, size = %zu\n", vec, size);
-
 	if (!vec) {
 		return VECE_NULL_POINTER;
 	} else if (size <= vec->max) {
@@ -144,8 +128,6 @@ int vector_reserve(struct vector *vec, size_t size)
 
 int vector_set(struct vector *vec, size_t index, void *item)
 {
-	DEBUG_PRINT("vec = %p, index = %zu, item = %p\n", vec, index, item);
-
 	if (!vec) {
 		return VECE_NULL_POINTER;
 	}
@@ -160,19 +142,15 @@ int vector_set(struct vector *vec, size_t index, void *item)
 
 int vector_swap(struct vector *vec, size_t idx1, size_t idx2)
 {
-	DEBUG_PRINT("vec = %p, idx1 = %zu, idx2 = %zu\n", vec, idx1, idx2);
-
 	int rc = VECE_OK;
 	void *item1 = NULL;
 	void *item2 = NULL;
 
 	if (VECE_OK != (rc = vector_get(vec, idx1, &item1))) {
-		DEBUG_PRINT("rc = %d\n", rc);
 		return rc;
 	}
 
 	if (VECE_OK != (rc = vector_get(vec, idx2, &item2))) {
-		DEBUG_PRINT("rc = %d\n", rc);
 		return rc;
 	}
 	
